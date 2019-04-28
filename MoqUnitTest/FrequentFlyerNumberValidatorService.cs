@@ -9,6 +9,12 @@ namespace MoqUnitTest
 
         public IServiceInformation ServiceInformation => throw new NotImplementedException("For demo purpose only");
 
+        public ValidationMode ValidationMode
+        {
+            get => throw new NotImplementedException("For demo purpose only");
+            set => throw new NotImplementedException("For demo purpose only");
+        }
+
         public bool IsValid(string frequentFlyerNumber)
         {
             throw new NotImplementedException("For demo purpose only");

@@ -27,6 +27,8 @@ namespace MoqUnitTest
             if (_validtor.ServiceInformation.License.LicenseKey == "EXPIRED")
                 return CreditCardApplicationDecision.ReferredToHuman;
 
+            _validtor.ValidationMode = application.Age >= 30 ? ValidationMode.Detailed : ValidationMode.Quick;
+
             var isValidFrequentFlyerNumber = _validtor.IsValid(application.FrequentFlyerNumber);
             if(!isValidFrequentFlyerNumber)
             {

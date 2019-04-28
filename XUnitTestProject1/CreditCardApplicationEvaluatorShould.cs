@@ -140,6 +140,30 @@ namespace XUnitTestProject1
             Assert.Equal(CreditCardApplicationDecision.ReferredToHuman, decision);
         }
 
+
+        [Fact]
+        public void UseDetailedLookupForOlderApplication()
+        {
+            var mockValidator = new Mock<IFrequentFlyerNumberValidator>();
+
+            mockValidator.SetupAllProperties(); // Does the above for all properties; This needs to be called before any other setup call for the mock
+            mockValidator.Setup(x => x.ServiceInformation.License.LicenseKey).Returns("OK");
+            //mockValidator.SetupProperty(x => x.ValidationMode); // Tell this property to track it's changes, so it can be used in the Assert
+            
+            
+            var sut = new CreditCardApplicationEvaluator(mockValidator.Object);
+
+            var application = new CreditCardApplication { Age = 30 };
+
+
+            var decision = sut.Evaluate(application);
+
+            Assert.Equal(ValidationMode.Detailed, mockValidator.Object.ValidationMode); //Mock properties by default don't track changes to it.
+
+        }
+
+
+
         private static string GetLicenseKeyExpireString()
         {
             return "EXPIRED";
