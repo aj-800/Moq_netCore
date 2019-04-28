@@ -29,6 +29,9 @@ namespace XUnitTestProject1
 
             Mock<IFrequentFlyerNumberValidator> mockValidator = new Mock<IFrequentFlyerNumberValidator>();
             mockValidator.Setup(m => m.IsValid(It.IsAny<string>())).Returns(true);
+            //mockValidator.Setup(x => x.ServiceInformation.License.LicenseKey).Returns("OK");
+            mockValidator.DefaultValue = DefaultValue.Mock; //Can create mocks for Interface, abstract and non-sealed class. String is sealed. 
+
 
             var sut = new CreditCardApplicationEvaluator(mockValidator.Object);
 
@@ -52,6 +55,7 @@ namespace XUnitTestProject1
             //mockValidator.Setup(m => m.IsValid(It.IsIn("x", "y", "z"))).Returns(true);
             //mockValidator.Setup(m => m.IsValid(It.IsInRange("a", "z", Range.Inclusive))).Returns(true);
             mockValidator.Setup(m => m.IsValid(It.IsRegex("[a-z]", System.Text.RegularExpressions.RegexOptions.None))).Returns(true);
+            mockValidator.Setup(x => x.ServiceInformation.License.LicenseKey).Returns("OK");
 
             var sut = new CreditCardApplicationEvaluator(mockValidator.Object);
 
@@ -68,29 +72,29 @@ namespace XUnitTestProject1
 
         }
 
-        [Fact]
-        public void DeclineLowIncomeApplicationOutDemo()
-        {
+        //[Fact]
+        //public void DeclineLowIncomeApplicationOutDemo()
+        //{
 
-            Mock<IFrequentFlyerNumberValidator> mockValidator = new Mock<IFrequentFlyerNumberValidator>();
+        //    Mock<IFrequentFlyerNumberValidator> mockValidator = new Mock<IFrequentFlyerNumberValidator>();
 
-            bool isValid = true;
-            mockValidator.Setup(x => x.IsValid(It.IsAny<string>(), out isValid));
+        //    bool isValid = true;
+        //    mockValidator.Setup(x => x.IsValid(It.IsAny<string>(), out isValid));
 
-            var sut = new CreditCardApplicationEvaluator(mockValidator.Object);
+        //    var sut = new CreditCardApplicationEvaluator(mockValidator.Object);
 
-            var application = new CreditCardApplication()
-            {
-                GrossAnnualIncome = 19_000,
-                Age = 43,
-                FrequentFlyerNumber = "x"
-            };
+        //    var application = new CreditCardApplication()
+        //    {
+        //        GrossAnnualIncome = 19_000,
+        //        Age = 43,
+        //        FrequentFlyerNumber = "x"
+        //    };
 
-            var decision = sut.EvaluateUsingOut(application);
+        //    var decision = sut.EvaluateUsingOut(application);
 
-            Assert.Equal(CreditCardApplicationDecision.AutoDeclined, decision);
+        //    Assert.Equal(CreditCardApplicationDecision.AutoDeclined, decision);
 
-        }
+        //}
 
         [Fact]
         public void ReferInvalidFrequentFlyerApplications()
@@ -98,6 +102,7 @@ namespace XUnitTestProject1
             //Mock<IFrequentFlyerNumberValidator> mockValidator = new Mock<IFrequentFlyerNumberValidator>(MockBehavior.Strict);
             Mock<IFrequentFlyerNumberValidator> mockValidator = new Mock<IFrequentFlyerNumberValidator>();
             mockValidator.Setup(m => m.IsValid(It.IsAny<string>())).Returns(false);
+            mockValidator.Setup(x => x.ServiceInformation.License.LicenseKey).Returns("OK");
 
             var sut = new CreditCardApplicationEvaluator(mockValidator.Object);
 
@@ -115,7 +120,16 @@ namespace XUnitTestProject1
         {
             var mockValidator = new Mock<IFrequentFlyerNumberValidator>();
             mockValidator.Setup(x => x.IsValid(It.IsAny<string>())).Returns(true);
-            mockValidator.Setup(x => x.LicenseKey).Returns(GetLicenseKeyExpireString());
+
+            //var mockLicenseData = new Mock<ILicenseData>();
+            //mockLicenseData.Setup(x => x.LicenseKey).Returns(GetLicenseKeyExpireString());
+
+            //var mockServiceInformation = new Mock<IServiceInformation>();
+            //mockServiceInformation.Setup(x => x.License).Returns(mockLicenseData.Object);
+
+            //mockValidator.Setup(x => x.ServiceInformation).Returns(mockServiceInformation.Object);
+
+            mockValidator.Setup(x => x.ServiceInformation.License.LicenseKey).Returns(GetLicenseKeyExpireString());
 
             var sut = new CreditCardApplicationEvaluator(mockValidator.Object);
 

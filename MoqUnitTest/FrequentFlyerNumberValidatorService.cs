@@ -6,7 +6,8 @@ namespace MoqUnitTest
 {
     public class FrequentFlyerNumberValidatorService : IFrequentFlyerNumberValidator
     {
-        public string LicenseKey => throw new NotImplementedException("For demo purpose only");
+
+        public IServiceInformation ServiceInformation => throw new NotImplementedException("For demo purpose only");
 
         public bool IsValid(string frequentFlyerNumber)
         {
